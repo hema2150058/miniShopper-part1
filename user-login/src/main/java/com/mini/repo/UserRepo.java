@@ -7,7 +7,7 @@ import com.mini.model.User;
 public interface UserRepo extends JpaRepository<User, String>{
 
 
-	boolean existsByUsername(String email);
+	boolean existsByUserEmail(String email);
 
 	User findByUserEmail(String email);
 }

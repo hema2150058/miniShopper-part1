@@ -2,12 +2,15 @@ package com.mini.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class JwtResponse {
 	
 	private String username;
+	
+	private String email;
 	
     private String jwtAuthToken;
 
@@ -15,37 +18,14 @@ public class JwtResponse {
 
     private long tokenExpirationTime;
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
+	public JwtResponse(String username, String email, String jwtAuthToken, long serverCurrentTime,
+			long tokenExpirationTime) {
+		super();
 		this.username = username;
-	}
-
-	public String getJwtAuthToken() {
-		return jwtAuthToken;
-	}
-
-	public void setJwtAuthToken(String jwtAuthToken) {
+		this.email = email;
 		this.jwtAuthToken = jwtAuthToken;
-	}
-
-	public long getServerCurrentTime() {
-		return serverCurrentTime;
-	}
-
-	public void setServerCurrentTime(long serverCurrentTime) {
 		this.serverCurrentTime = serverCurrentTime;
-	}
-
-	public long getTokenExpirationTime() {
-		return tokenExpirationTime;
-	}
-
-	public void setTokenExpirationTime(long tokenExpirationTime) {
 		this.tokenExpirationTime = tokenExpirationTime;
 	}
-    
     
 }

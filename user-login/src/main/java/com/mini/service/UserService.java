@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         roleRepo.save(shopperRole);
 
         Role customerRole = new Role();
-        customerRole.setRoleName("Customer Role");
+        customerRole.setRoleName("Customer");
         customerRole.setRoleDescription("Default role for newly created record");
         roleRepo.save(customerRole);
         
@@ -124,8 +124,8 @@ public class UserService implements UserDetailsService {
 		
 	}
 
-	public boolean existByUsername(String username) {
-		return userRepo.existsByUsername(username);
+	public boolean existsByUserEmail(String username) {
+		return userRepo.existsByUserEmail(username);
 	}
 	
 	

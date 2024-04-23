@@ -3,6 +3,7 @@ package com.mini;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,9 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/register", "/login","/createNewRole").permitAll()
-		.antMatchers(HttpMethod.GET, "/health-check","/5","/upgradeUser","/getAllUsers").hasRole("ADMIN")
-		.antMatchers(HttpMethod.GET, "/validate").hasAnyRole("USER","ADMIN")
-		.antMatchers(HttpMethod.GET,"/getUsers").hasAnyRole("USER")
+//		.antMatchers(HttpMethod.GET, "/health-check","/5","/upgradeUser","/getAllUsers").hasRole("shopper")
+//		.antMatchers(HttpMethod.GET, "/validate").hasAnyRole("USER","ADMIN")
+//		.antMatchers(HttpMethod.GET,"/getUsers").hasAnyRole("USER")
+        .antMatchers(HttpHeaders.ALLOW).permitAll()
 		.anyRequest().authenticated().and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
