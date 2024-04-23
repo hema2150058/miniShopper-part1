@@ -13,10 +13,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
-    @Column(name = "id", unique = true)
+    //@Column(name = "id", unique = true)
     private String userName;
     private String userFirstName;
     private String userLastName;
@@ -28,19 +29,12 @@ public class User {
 	@Column
 	private Timestamp createdDate;
    
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLE",
-            joinColumns = {
-                    @JoinColumn(name = "USER_ID")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ROLE_ID")
-            }
-    )
-    private Set<Role> role;
+    @ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
     
-	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn()
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_add_id")
     private Address address;
 
     public String getUserName() {
@@ -76,11 +70,11 @@ public class User {
     }
 
     public Set<Role> getRole() {
-        return role;
+        return roles;
     }
 
     public void setRole(Set<Role> role) {
-        this.role = role;
+        this.roles = role;
     }
     
     public Address getAddress() {

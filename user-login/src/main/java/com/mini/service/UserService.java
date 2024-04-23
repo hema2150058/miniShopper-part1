@@ -51,6 +51,7 @@ public class UserService implements UserDetailsService {
         roleRepo.save(customerRole);
         
         Address shopperAddress = new Address();
+        shopperAddress.setAddressId("Shopper123");
         shopperAddress.setAddressLine("RK Nagar");
         shopperAddress.setStreet("Madhapur");
         shopperAddress.setCity("Vizag");
@@ -59,6 +60,7 @@ public class UserService implements UserDetailsService {
         addressRepo.save(shopperAddress);
         
         Address customerAddress = new Address();
+        customerAddress.setAddressId("raj123");
         customerAddress.setAddressLine("Mn Nagar");
         customerAddress.setStreet("IS Sadan");
         customerAddress.setCity("Hyderabad");
@@ -80,13 +82,25 @@ public class UserService implements UserDetailsService {
         User customer = new User();
         customer.setUserName("raj123");
         customer.setUserPassword(getEncodedPassword("raj@123"));
-        customer.setUserFirstName("raj");
+        customer.setUserFirstName("raja");
         customer.setUserLastName("sharma");
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(customerRole);
         customer.setRole(userRoles);
-        ShopperUser.setAddress(customerAddress);
+        customer.setAddress(customerAddress);
         userRepo.save(customer);
+        
+//        User customer1 = new User();
+//        customer.setUserName("hea123");
+//        customer.setUserPassword(getEncodedPassword("hea@123"));
+//        customer.setUserFirstName("hema");
+//        customer.setUserLastName("sharma");
+//        Set<Role> userRoles1 = new HashSet<>();
+//        userRoles.add(customerRole);
+//        customer.setRole(userRoles);
+//        ShopperUser.setAddress(customerAddress);
+//        userRepo.save(customer);
+        
     }
 	
 	public String getEncodedPassword(String password) {
