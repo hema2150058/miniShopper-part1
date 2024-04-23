@@ -1,5 +1,9 @@
 package com.mini.repo;
 
-public interface RoleRepo {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.mini.model.Role;
+
+public interface RoleRepo extends JpaRepository<Role, String> {
 
 }

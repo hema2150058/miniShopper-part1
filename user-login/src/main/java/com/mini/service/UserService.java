@@ -1,5 +1,132 @@
 package com.mini.service;
 
-public class UserService {
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.mini.model.Address;
+import com.mini.model.Role;
+import com.mini.model.User;
+import com.mini.repo.AddressRepo;
+import com.mini.repo.RoleRepo;
+import com.mini.repo.UserRepo;
+
+@Service
+public class UserService implements UserDetailsService {
+
+	@Autowired
+	private RoleRepo roleRepo;
+	
+	@Autowired
+	private AddressRepo addressRepo;
+	
+	@Autowired
+	private UserRepo userRepo;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+	
+	public void initRoleAndUser() {
+
+        Role shopperRole = new Role();
+        shopperRole.setRoleName("Shopper");
+        shopperRole.setRoleDescription("Shopper role");
+        roleRepo.save(shopperRole);
+
+        Role customerRole = new Role();
+        customerRole.setRoleName("Customer Role");
+        customerRole.setRoleDescription("Default role for newly created record");
+        roleRepo.save(customerRole);
+        
+        Address shopperAddress = new Address();
+        shopperAddress.setAddressLine("RK Nagar");
+        shopperAddress.setStreet("Madhapur");
+        shopperAddress.setCity("Vizag");
+        shopperAddress.setState("TS");
+        shopperAddress.setPincode(2873990);
+        addressRepo.save(shopperAddress);
+        
+        Address customerAddress = new Address();
+        customerAddress.setAddressLine("Mn Nagar");
+        customerAddress.setStreet("IS Sadan");
+        customerAddress.setCity("Hyderabad");
+        customerAddress.setState("AS");
+        customerAddress.setPincode(7979889);
+        addressRepo.save(customerAddress);
+        
+        User ShopperUser = new User();
+        ShopperUser.setUserName("Shopper123");
+        ShopperUser.setUserPassword(getEncodedPassword("shopper@pass"));
+        ShopperUser.setUserFirstName("shop");
+        ShopperUser.setUserLastName("per");
+        Set<Role> adminRoles = new HashSet<>();
+        adminRoles.add(shopperRole);
+        ShopperUser.setRole(adminRoles);
+        ShopperUser.setAddress(shopperAddress);
+        userRepo.save(ShopperUser);
+
+        User customer = new User();
+        customer.setUserName("raj123");
+        customer.setUserPassword(getEncodedPassword("raj@123"));
+        customer.setUserFirstName("raj");
+        customer.setUserLastName("sharma");
+        Set<Role> userRoles = new HashSet<>();
+        userRoles.add(customerRole);
+        customer.setRole(userRoles);
+        ShopperUser.setAddress(customerAddress);
+        userRepo.save(customer);
+    }
+	
+	public String getEncodedPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+		User user = userRepo.findByUserEmail(email);
+		
+		if(user==null) {
+			throw new UsernameNotFoundException("User not found for email: "+email);
+		}
+		return new org.springframework.security.core.userdetails.User
+				(user.getUserEmail(), user.getUserPassword(), getAuthority(user));
+	}
+	
+	private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        user.getRole().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
+        });
+        return authorities;
+    }
+
+	public User saveUsers(User users) {
+		try {
+		User value = userRepo.save(users);
+		return value;
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new RuntimeException("Email or username is already in use. Please choose a different one");
+		}
+		
+	}
+
+	public boolean existByUsername(String username) {
+		return userRepo.existsByUsername(username);
+	}
+	
+	
 }
