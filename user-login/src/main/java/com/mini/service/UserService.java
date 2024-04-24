@@ -68,20 +68,22 @@ public class UserService implements UserDetailsService {
         customerAddress.setPincode(7979889);
         addressRepo.save(customerAddress);
         
-        User ShopperUser = new User();
-        ShopperUser.setUserName("Shopper123");
-        ShopperUser.setUserPassword(getEncodedPassword("shopper@pass"));
-        ShopperUser.setUserFirstName("shop");
-        ShopperUser.setUserLastName("per");
+        User shopperUser = new User();
+        shopperUser.setUserName("Shopper123");
+        shopperUser.setUserPassword(getEncodedPassword("shopper@pass"));
+        shopperUser.setUserEmail("shopper@mini.com");
+        shopperUser.setUserFirstName("shop");
+        shopperUser.setUserLastName("per");
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(shopperRole);
-        ShopperUser.setRole(adminRoles);
-        ShopperUser.setAddress(shopperAddress);
-        userRepo.save(ShopperUser);
+        shopperUser.setRole(adminRoles);
+        shopperUser.setAddress(shopperAddress);
+        userRepo.save(shopperUser);
 
         User customer = new User();
         customer.setUserName("raj123");
         customer.setUserPassword(getEncodedPassword("raj@123"));
+        customer.setUserEmail("raj123@gmail.com");
         customer.setUserFirstName("raja");
         customer.setUserLastName("sharma");
         Set<Role> userRoles = new HashSet<>();
@@ -142,5 +144,8 @@ public class UserService implements UserDetailsService {
 		return userRepo.existsByUserEmail(username);
 	}
 	
+	public boolean existsByUserName(String userName) {
+		return userRepo.existsByUserName(userName);
+	}
 	
 }

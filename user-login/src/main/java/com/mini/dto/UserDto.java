@@ -17,6 +17,7 @@ public class UserDto {
     private String userEmail;
     private String userPassword;
 	private Timestamp createdDate;
+	private Address address;
     
 
 }

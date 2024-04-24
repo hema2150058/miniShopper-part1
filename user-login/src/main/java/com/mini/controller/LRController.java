@@ -24,6 +24,7 @@ import com.mini.dto.RegisterDto;
 import com.mini.dto.UserDto;
 import com.mini.dto.ValidateStatusDto;
 import com.mini.exception.UserAlreadyExistException;
+import com.mini.model.Address;
 import com.mini.model.Role;
 import com.mini.model.User;
 import com.mini.repo.UserRepo;
@@ -57,9 +58,9 @@ public class LRController {
 
 	@PostMapping(path = "/register")
 	public ResponseEntity<Object> registerUser(@RequestBody UserDto userDTO) throws UserAlreadyExistException {
-		boolean b = this.userService.existsByUserEmail(userDTO.getUserEmail());
+		boolean b = (this.userService.existsByUserEmail(userDTO.getUserEmail()) || this.userService.existsByUserName(userDTO.getUserName()));
 		if (b) {
-			throw new UserAlreadyExistException("User Already Exist: " + userDTO.getUserEmail());
+			throw new UserAlreadyExistException("User Already Exist: " + userDTO.getUserEmail()+" " +userDTO.getUserName());
 		} else {
 			User users = new User();
 			users.setUserName(userDTO.getUserName());
@@ -68,7 +69,9 @@ public class LRController {
 			users.setUserLastName(userDTO.getUserLastName());
 			users.setUserEmail(userDTO.getUserEmail());
 			users.setCreatedDate(userDTO.getCreatedDate());
-
+			//users.setAddress(new Address(userDto))
+			
+			users.setAddress(userDTO.getAddress());
 			HashSet<Role> roles = new HashSet<>();
 			Role role = new Role();
 			role.setRoleName("Customer");
@@ -77,7 +80,7 @@ public class LRController {
 
 			this.userService.saveUsers(users);
 			return new ResponseEntity<Object>(
-					new RegisterDto( users.getUserName(), users.getUserPassword()),
+					new RegisterDto( users.getUserName(), users.getUserEmail()),
 					HttpStatus.CREATED);
 		}
 	}
