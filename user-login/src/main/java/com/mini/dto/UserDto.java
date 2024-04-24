@@ -6,9 +6,11 @@ import java.util.Set;
 import com.mini.model.Address;
 import com.mini.model.Role;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class UserDto {
 
 	private String userName;

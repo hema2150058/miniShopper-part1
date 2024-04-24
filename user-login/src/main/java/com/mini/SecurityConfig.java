@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.mini.filter.JwtRequestFilter;
-import com.mini.service.UserService;
+import com.mini.service.LRService;
 
 @SuppressWarnings("deprecation")
 @EnableWebSecurity
@@ -27,15 +27,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	JwtRequestFilter jwtRequestFilter;
 
 	@Autowired
-	private UserService userService;
+	private LRService userService;
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/register", "/login","/createNewRole").permitAll()
 //		.antMatchers(HttpMethod.GET, "/health-check","/5","/upgradeUser","/getAllUsers").hasRole("shopper")
-		.antMatchers(HttpMethod.GET, "/validate").permitAll()
-//		.antMatchers(HttpMethod.GET,"/getUsers").hasAnyRole("USER")
+		.antMatchers(HttpMethod.GET, "/validate","/getUsers","/getAllCustomers").permitAll()
+		.antMatchers(HttpMethod.PUT, "/address").permitAll()
+		.antMatchers(HttpMethod.GET,"/getAll").hasAnyRole("Shopper")
         .antMatchers(HttpHeaders.ALLOW).permitAll()
 		.anyRequest().authenticated().and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -29,7 +29,7 @@ import com.mini.model.Role;
 import com.mini.model.User;
 import com.mini.repo.AddressRepo;
 import com.mini.repo.UserRepo;
-import com.mini.service.UserService;
+import com.mini.service.LRService;
 import com.mini.util.JwtUtil;
 
 @RestController
@@ -41,7 +41,7 @@ public class LRController {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private UserService userService;
+	private LRService userService;
 
 	@Autowired
 	private JwtUtil jwtTokenUtil;

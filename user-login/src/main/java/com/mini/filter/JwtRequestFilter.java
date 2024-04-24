@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.mini.service.UserService;
+import com.mini.service.LRService;
 import com.mini.util.JwtUtil;
 
 @Component
@@ -25,7 +25,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
 	@Autowired
-	private UserService userService;
+	private LRService userService;
 	
 	@Autowired
 	private JwtUtil jwtUtil;
