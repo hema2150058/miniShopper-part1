@@ -13,25 +13,30 @@ import com.mini.model.Role;
 import com.mini.model.User;
 import com.mini.repo.UserRepo;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserService {
 	
 	@Autowired
 	private UserRepo userRepo;
 	
-	public List<User> getAllCustomers(){
-		Role customerRole = new Role();
-		customerRole.setRoleName("Customer");
-		
-		List<User> customers = userRepo.findByRoles(customerRole);
-		return customers;
-	}
+//	public List<User> getAllCustomers(){
+//		Role customerRole = new Role();
+//		customerRole.setRoleName("Customer");
+//		
+//		List<User> customers = userRepo.findByRoles(customerRole);
+//		return customers;
+//	}     --------not used----------
 	
-	public void updateUserAddress(String userName, Address updatedAddress) {
+	public void updateUserAddress(String userName, Address updatedAddress) throws Exception {
+		
 		User user = userRepo.findByUserName(userName);
-//				.orElseThrow(()->new EntityNotFoundException("User not found with Username: "+ userName));
 		if(user == null) {
-			System.out.println("not found");
+			log.error("User not found with Username: "+ userName);
+			throw new NullPointerException();
+
 		}
 		
 		user.getAddress().setAddressLine(updatedAddress.getAddressLine());
@@ -41,6 +46,6 @@ public class UserService {
 		user.getAddress().setPincode(updatedAddress.getPincode());
 		
 		userRepo.save(user);
-
+		
 	}
 }

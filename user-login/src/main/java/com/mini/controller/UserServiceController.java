@@ -39,51 +39,42 @@ public class UserServiceController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
-//	@GetMapping( "/getAllUsers")
+	@GetMapping( "/getAllCustomers")
 //	@PreAuthorize("hasRole('Shopper')")
-//    public ResponseEntity<List<User>> getAllUserDetails(@RequestHeader(name = "Authorization") String tokenDup) {
-//
-//        List<User> result= userRepo.findAll();
-//        Iterator<User> it=result.iterator();
-//        List<User> usersList=new ArrayList<>();
-//
-//        while(it.hasNext()) {
-//            User row= it.next();
-//            System.out.println(row.getRole().toString());
-//            if(row.getRole().toString().equals("[Customer]")) {
-//                User users=new User();
-//               
-//                users.setUserName(row.getUserName());
-//                users.setUserFirstName(row.getUserFirstName());
-//                users.setUserLastName(row.getUserLastName());
-//                users.setUserEmail(row.getUserEmail());
-//                users.setCreatedDate(row.getCreatedDate());
-//                users.setUserPassword(row.getUserPassword());
-//                users.setAddress(row.getAddress());
-//          
-//                usersList.add(users);
-//                System.out.println("all users data "+usersList);
-//            }
-//            else {
-//            	System.out.println("not went inside if loop");
-//            }
-//
-//        }
+    public ResponseEntity<List<User>> getAllUserDetails(@RequestHeader(name = "Authorization") String tokenDup) {
+
+        List<User> result= userRepo.findAll();
+        Iterator<User> it=result.iterator();
+        List<User> usersList=new ArrayList<>();
+
+        while(it.hasNext()) {
+            User row= it.next();
+            System.out.println(row.getRole().toString());
+            if(row.getRole().toString().equals("[Customer]")) {
+                User users=new User();
+               
+                users.setUserName(row.getUserName());
+                users.setUserFirstName(row.getUserFirstName());
+                users.setUserLastName(row.getUserLastName());
+                users.setUserEmail(row.getUserEmail());
+                users.setCreatedDate(row.getCreatedDate());
+                users.setUserPassword(row.getUserPassword());
+                users.setAddress(row.getAddress());
+          
+                usersList.add(users);
+                System.out.println("all users data "+usersList);
+            }
+            else {
+            	System.out.println("not went inside if loop");
+            }
+
+        }
         
-//        return new ResponseEntity<List<User>>(usersList,HttpStatus.OK);
+       return new ResponseEntity<List<User>>(usersList,HttpStatus.OK);
 
-//    }
-	
-	@GetMapping(path ="/getAllCustomers",produces = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('Shopper')")
-	public ResponseEntity<List<User>> getAllCustomers(@RequestHeader(name = "Authorization") String tokenDup){
-		List<User> customers = userService.getAllCustomers();
-		System.out.println(customers);
-		return new ResponseEntity<>(customers,HttpStatus.OK);
-	}//not working
+    }
 
-
-	@GetMapping(path = "/getUsers", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/getCustomerDetails", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserDto> getUserDetails(@RequestHeader(name = "Authorization") String tokenDup) {
 
 		String token = tokenDup.substring(7);

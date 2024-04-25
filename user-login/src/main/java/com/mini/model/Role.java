@@ -23,5 +23,10 @@ public class Role {
     private String roleDescription;
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
 	private Set<User> users;
+    
+    @Override
+	public String toString() {
+		return roleName;
+	}
 
 }
