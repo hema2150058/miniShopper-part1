@@ -13,7 +13,7 @@ public class CartResDto {
 		//for getting cart res when there are already Items in cart
 		private int cartId;
 
-		private int userId;
+		private String userId;
 		
 		private int productId;
 

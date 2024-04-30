@@ -69,7 +69,7 @@ public class CartController {
 	}
 
 	@GetMapping(path = "/getCart/{userId}")
-	public ResponseEntity<List<CartResDto>> getCart(@PathVariable int userId) throws CartNotFoundException {
+	public ResponseEntity<List<CartResDto>> getCart(@PathVariable String userId) throws CartNotFoundException {
 		List<CartResDto> cart = cartService.getCart(userId);
 		if (cart.isEmpty()) {
 			throw new CartNotFoundException("Cart with userId: "+userId+ "not found.");
@@ -79,7 +79,7 @@ public class CartController {
 	}
 
 	@GetMapping(path = "/getCartItems/{userId}")
-	public ResponseEntity<List<CartItemsResponse>> getCartItems(@PathVariable int userId) throws CartNotFoundException {
+	public ResponseEntity<List<CartItemsResponse>> getCartItems(@PathVariable String userId) throws CartNotFoundException {
 		List<CartItemsResponse> cartItems = cartService.getCartItems(userId);
 		if (cartItems.isEmpty()) {
 			throw new CartNotFoundException("No Items in the cart for the userId: "+userId);

@@ -10,7 +10,7 @@ import lombok.*;
 public class CartReqDto {
 
 //	/add , update 
-	private int userId;
+	private String userId;
 	
 	private int productId;
 	

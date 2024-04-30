@@ -66,7 +66,7 @@ public class CartService {
 		return cartRepo.findAll();
 	}
 
-	public List<CartResDto> getCart(int userId) {
+	public List<CartResDto> getCart(String userId) {
 
 		List<Cart> cart = cartRepo.findByUserId(userId);
 		List<CartResDto> getcartitemsres = new ArrayList<>();
@@ -82,7 +82,7 @@ public class CartService {
 		return getcartitemsres;
 	}
 
-	public List<CartItemsResponse> getCartItems(int userId) {
+	public List<CartItemsResponse> getCartItems(String userId) {
 
 		List<Cart> cart = cartRepo.findByUserId(userId);
 		List<CartItemsResponse> getcartitemsres = new ArrayList<>();
@@ -102,7 +102,7 @@ public class CartService {
 	}
 	
 	@Transactional
-	public void removeProductFromCart(int userId, int productId) throws NotFoundException {
+	public void removeProductFromCart(String userId, int productId) throws NotFoundException {
 
 		Product product = productService.getProductById(productId);
 

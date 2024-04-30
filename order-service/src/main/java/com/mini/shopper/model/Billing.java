@@ -7,22 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
+@Table(name = "billingtb")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
+@Data
+public class Billing {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cartId;
-
-	private String userId;
+	private int billingId;
+	private String billingName;
+	private String billingphoneNum;
+	private String billingAddress;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="productId")
-	private Product productId;
+		
 
-	private int quantity;
-	
-	private double price;
 }

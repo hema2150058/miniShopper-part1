@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Component
 public class IsItemInCart {
 
-	private int userId;
+	private String userId;
 	
 	private int productId;
 	

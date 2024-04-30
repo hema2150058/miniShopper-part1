@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Component
 public class CartItemReq {
 	//for api calls "IsItemInCart and RemoveItemFromCart
-	private int userId;
+	private String userId;
 	
 	private int productId;
 	

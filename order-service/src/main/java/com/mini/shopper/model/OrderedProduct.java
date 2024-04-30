@@ -7,22 +7,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "OrderedProducts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
+public class OrderedProduct {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cartId;
-
-	private String userId;
+	private int orderedProductsId;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name="productId")
 	private Product productId;
-
-	private int quantity;
 	
 	private double price;
+	
+	private int quantity;
+	
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@JoinColumn(name="orderId")
+    private Order orderId;
+	
+	private String userId;
+	
+
 }
