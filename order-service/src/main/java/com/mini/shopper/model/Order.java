@@ -27,6 +27,8 @@ public class Order {
 
 	private Double totalPrice;
 	
+	private String orderStatus;
+	
 	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "billingId")
 	private Billing billing;	

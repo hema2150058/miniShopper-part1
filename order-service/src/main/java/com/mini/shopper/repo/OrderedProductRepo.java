@@ -10,5 +10,7 @@ import com.mini.shopper.model.OrderedProduct;
 public interface OrderedProductRepo extends JpaRepository<OrderedProduct, Long>{
 
 	List<OrderedProduct> findByOrderId(Order orderId);
-
+	
+	//OrderedProduct findByOrderNumber(Order orderNumber);
+	//OrderedProduct findByOrderedProductsId
 }
