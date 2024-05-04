@@ -7,6 +7,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.mini.shopper.dto.OrderDetailsRes;
@@ -22,6 +24,7 @@ import com.mini.shopper.repo.BillingRepo;
 import com.mini.shopper.repo.CartRepo;
 import com.mini.shopper.repo.OrderRepo;
 import com.mini.shopper.repo.OrderedProductRepo;
+import com.mini.shopper.repo.ProductRepo;
 
 @Service
 public class OrderService {
@@ -34,6 +37,9 @@ public class OrderService {
 	
 	@Autowired
 	BillingRepo billingRepo;
+	
+	@Autowired
+	ProductRepo productRepo;
 	
 	@Autowired
 	OrderRepo orderRepo;
@@ -162,39 +168,59 @@ public class OrderService {
 		//by findbyOrderStatus; admin
 		return allPendingOrders;
 	}
-	
-//	public PlaceOrderRes changeOrderStatusToSuccess(long orderId){
 
-	public String changeOrderStatusToSuccess(Long orderNumber){
+	public ResponseEntity<String> changeOrderStatusToSuccess(Long orderNumber){
 		
-		List<Order> ordered = orderRepo.findByOrderNumber(orderNumber);
-		//Order order = orderRepo.findOrderByorderNumber(orderNumber);
-		List<OrderedProduct> orderedProduct = orderProductRepo.findByOrderId(ordered.get(0));
+		List<Order> order = orderRepo.findByOrderNumber(orderNumber);
+		System.out.println("orderId is: "+ order.get(0).getOrderId());
 		
-		//OrderedProduct orderedproduct = orderProductRepo.findByOrderId(order);
-		//order.setOrderStatus("Success");
-//		for(orderProducts i : orderedProduct) {
-//			
-//		}
-		Product product = new Product(); //change quantity of product
-		//product.getPrice()
-		return "Status changed successfully"; //by findbyOrderNumber; admin
+		List<OrderedProduct> orderpro = orderProductRepo.findByOrderId(order.get(0));
+		System.out.println(orderpro);
+		ResponseEntity<String> res = null;
+		for(OrderedProduct i : orderpro) {
+			System.out.println(i.getProductId());
+			Product product = i.getProductId();
+			if(i.getProductId().getStockQuantity()>i.getQuantity() ) {
+			product.setStockQuantity(i.getProductId().getStockQuantity()-i.getQuantity());
+			productRepo.save(product);
+			order.get(0).setOrderStatus("Success");
+			orderRepo.save(order.get(0));
+			res = ResponseEntity.ok("Order is accepted successfully");
+			}
+			else {
+			res= ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.body("Ordered Prodouct quantity is more than the stock quantity");
+			}
+		}
+		return res;
 	}
 
-	public Order changeOrderStatusToReview(int orderId){
+	public ResponseEntity<String> changeOrderStatusToReview(Long orderNumber){
 			
-			Order order = orderRepo.findOrderByOrderId(orderId);
+			Order order = orderRepo.findOrderByOrderNumber(orderNumber);
+			
+			if(!"Success".equals(order.getOrderStatus())) {
 			order.setOrderStatus("Need reviewing");
-			
-			return orderRepo.save(order); //by findbyOrderNumber; admin
+			orderRepo.save(order);
+			return ResponseEntity.ok("Order status changed to review");
+			}
+			return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+					.body("Can't change the order status. Its already a successful order");
+			//by findbyOrderNumber; admin
 		}
 	
-	public Order changeOrderStatusToRejected(int orderId){
+	public ResponseEntity<String> changeOrderStatusToRejected(Long orderNumber){
 		
-		Order order = orderRepo.findOrderByOrderId(orderId);
+		Order order = orderRepo.findOrderByOrderNumber(orderNumber);
+		
+		if(!"Success".equals(order.getOrderStatus())) {
 		order.setOrderStatus("Rejected");
-		
-		return orderRepo.save(order); //by findbyOrderNumber; admin
+		orderRepo.save(order);
+		return ResponseEntity.ok("Order Status changed to rejected");
+		}
+		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+				.body("Can't change the order status. Its already a successful order");
+		//admin
 	}
 	
 	//one more endpoint for user

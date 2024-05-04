@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,17 +42,31 @@ public class OrderController {
 		return ResponseEntity.ok(orderDtos);
 	}
 	
-	@GetMapping("/orderHistory")
+	@GetMapping("/orderHistory") //Shopper
 	public ResponseEntity<List<OrderDetailsRes>> getAllOrders() {
 		List<OrderDetailsRes> orderDtos = orderService.getAllOrders();
 		return ResponseEntity.ok(orderDtos);
 	}
 	
-	@GetMapping("/pendingOrders")
+	@GetMapping("/pendingOrders") //Shopper
 	public ResponseEntity<List<OrderDetailsRes>> getAllPendingOrders() {
 		List<OrderDetailsRes> orderDtos = orderService.getAllPendingOrders("Pending");
 		return ResponseEntity.ok(orderDtos);
 	}
-
+	
+	@PatchMapping("/statusChangeToReview/{orderNumber}") //Shopper
+	public ResponseEntity<String> orderStatusChangeToReview(@PathVariable Long orderNumber) {
+		return orderService.changeOrderStatusToReview(orderNumber);
+	}
+	
+	@PatchMapping("/statusChangeToRejected/{orderNumber}") //Shopper
+	public ResponseEntity<String> orderStatusChangeToRejected(@PathVariable Long orderNumber) {
+		return orderService.changeOrderStatusToRejected(orderNumber);
+	}
+	
+	@PatchMapping("statusChangeToSuccess/{orderNumber}")
+	public ResponseEntity<String> statusChangeToSuccess(@PathVariable Long orderNumber) {
+	return orderService.changeOrderStatusToSuccess(orderNumber);
+	}
 }
 
