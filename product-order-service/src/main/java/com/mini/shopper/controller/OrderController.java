@@ -1,5 +1,6 @@
 package com.mini.shopper.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mini.shopper.dto.OrderDetailsRes;
 import com.mini.shopper.dto.PlaceOrderReq;
 import com.mini.shopper.dto.PlaceOrderRes;
+import com.mini.shopper.service.FileService;
 import com.mini.shopper.service.OrderService;
 
 @RestController
@@ -23,6 +27,9 @@ public class OrderController {
 
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	FileService fileService;
 	
 	@PostMapping("/placeOrder") //Customer
 	public ResponseEntity<PlaceOrderRes> placeOrder(@RequestBody PlaceOrderReq placeorderreq) {
@@ -68,5 +75,17 @@ public class OrderController {
 	public ResponseEntity<String> statusChangeToSuccess(@PathVariable Long orderNumber) {
 	return orderService.changeOrderStatusToSuccess(orderNumber);
 	}
+	
+	@PostMapping("/uploadfile")
+	public ResponseEntity<String> uploadFileToOrder(@RequestParam("file") MultipartFile file){
+		try {
+			fileService.uploadToOrder(file);
+			return ResponseEntity.ok("file uploaded");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error uploading file");
+		}
+	}
+	
 }
 
